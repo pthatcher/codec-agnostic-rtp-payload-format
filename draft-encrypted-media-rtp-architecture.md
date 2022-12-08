@@ -277,7 +277,8 @@ This information has to be sent unencrypted.
 A potential solution is to send the spatial layer frames using the same SSRC in ascending order, with the same RTP timestamp, and only the last RTP packet of the last spatial layer frame will have the marker bit set to 1.
 In addition, to identify how the frame relates to other frames (key frame, spatial layer...), the Dependency Descriptor header extension can be used.
 In that case, the first RTP packet of the frame will have its start_of_frame equal to 1 and the last packet will have its end_of_frame equal to 1.
-It can be noted that the Dependency Descriptor header extension information can be fueled by the encoded frame metadata, such as the one exposed in WebCodecs SvcOutputMetadata.
+It can be noted that the Dependency Descriptor header extension information can be fueled by the encoded frame metadata, such as the one exposed in WebCodecs SvcOutputMetadata
+(see https://docs.google.com/presentation/d/1lFAUSvApbBYfBNJH_xcRW0YjD0aF5T1ZqjyyDJMesJw/edit#slide=id.g1a4ac56601a_3_7 for instance).
 
 SDP negotiation
 -----------------------
