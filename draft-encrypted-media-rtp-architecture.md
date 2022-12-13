@@ -260,6 +260,40 @@ For video, the following configuration information might include:
 - Codec specific configuration information: codec profile like profile_idc...
 - Frame specific information: whether the stream is decodable when starting from this frame, whether the frame is skippable...
 
+Repacketization
+===============
+
+A intermediary may need to repacetize from one size of RTP packets to another.  For example, an SFU speaking RTP over QUIC on one side and RTP over UDP on the other side may have larger RTP packets on the QUIC side and smaller RTP packets on the UDP side.  Further, because RTP packets arrive out of order and should be forwarded immediately to maintain the low delay, the packetization format SHOULD allow for repacketizing out-of-order RTP packets without delay.
+
+From large to small
+-------------------
+
+If large RTP packets arrive in order, it is easy to repacketize them into small RTP packets using any packetization format by doing the following:
+1. Get the encrypted content and metadata from the large RTP packet.
+1. Packetize the encrypted content and metadata as if it came from the Media Encryptor.
+
+However, if the RTP packets arrive out of order, there is a problem: if large RTP packet 2 arrives before large RTP packet 1, if large RTP packet 2 is broken up into smaller RTP packets B1, B2, B3, it's not possible to know if large RTP packet 1 will be broken up into 3 smaller RTP packets (A1, A2, A3) , or 10, or 100.  Thus, if the sequence numbers for B1, B2, and B3 must be larger than A1, A2, and A3, it's not possible to know how large to make B1 until receiving the last small RTP packet for large RTP packet 1 (A3, for example).  Thus it's not possible to forward large RTP packet 2 without delay unless the small RTP packet sequence numbers can be in a different order than sequence numbers of the large RTP packets they correspond to.
+
+Thus, one requirement for a packetization format that allows for repacketization to different sizes out of order without delay is: The format MUST allow encrypted frames to be in a different order than the sequence numbers of RTP packets.  In other words, the order of the encrypted frames must be knowable even if the sequence numbers of RTP packets is not in the same order as the encrypted frames contained in them.
+
+From small to large
+-------------------
+
+If small RTP packets arrive in order, it is easy to repacketize them into large RTP packets using any packetization format by doing the following:
+1. Get the encrypted content and metadata from the a sequence of RTP packets, starting with the first of an encrypted frame, and ending with the last of an encrypted frame.
+1. Packetize the encrypted content and metadata as if it came from the Media Encryptor.
+
+However, if the RTP packets arrive out of order, there is a problem: if small RTP packet 5 arrives before small RTP packet 1,  if small RTP packet 1 is part of encrypted frame 1 and small RTP packet 5 is part of encrypted frame 2, how is it possible to know that packet 5 is part of encrypted frame 2 and not part of frame 1 or part of frame 3?  There must be a way to know the order of the encrypted frames without relying on just the small RTP sequence numbers.  This is similar to need described above for knowing the order of the encrypted frames even if the sequence numbers are in a different order, but in this case it's if they arrive in a different order.
+
+Assuming there exists a way to know this order of encrypted frames, there is still another problem: it's not possible to know where small RTP packet 5 resides in its encrypted frame relative to the entire encrypted frame.  In other words: what is the offset that bytes of small RTP packet 5 relative to the encrypted frame?  Until all the packets for encrypted frame 2 arrive before small RTP packet 5 arrive, it's not possible to know unless that information is included in small RTP packet 5.  Having such information would make it much easier for an SFU to translate, for example, a small RTP packet over UDP into a QUIC stream frame.
+
+Summary of repacketization needs
+--------------------------------
+
+To repacketize to different sizes of RTP, especially between RTP over UDP and RTP over QUIC, and especially when packets arrive out of order, it would be useful to have the following information in each RTP packet:
+1. A way to order encrypted frames independent of RTP sequence number.  For example, a frame ID.  This is useful for repacketization in both directions.
+2. A byte offset of the position of the RTP payload relative to the start of the encrypted frame.  This is useful for "small to large" repacketization.
+
 
 Proof of concept
 =======================
