@@ -214,7 +214,7 @@ For video content, this can be based on reading the Dependency Descriptor header
 The Media Decryptor decrypts the decoded content into encoded content.
 The correct Media Decoder is identified by the payload type of the encoded content and the encoded content is passed to the Media Decoder, which produces raw content along with metadata of raw content.
 
-Intermediaries that do not have encryption keys (such as SFUs) can also reconstruct the encrypted content, metadata, and payload type of the encoded content, but cannot decrypt the enrypted content.  This is particularly useful for servers (such as SFUs) that need to have a basic understanding of each frame they receive so as to decide to forward it or not and to which endpoint.   Such processing units may also repacketize the encrypted content and metadata into other RTP streams.   Such intermediaries must not modify the encrypted content.
+Intermediaries that do not have encryption keys (such as SFUs) can also reconstruct the encrypted content, metadata, and payload type of the encoded content, but cannot decrypt the encrypted content.  This is particularly useful for servers (such as SFUs) that need to have a basic understanding of each frame they receive so as to decide to forward it or not and to which endpoint. Such processing units may also repacketize the encrypted content and metadata into other RTP streams. Such intermediaries must not modify the encrypted content.
 
 
 
