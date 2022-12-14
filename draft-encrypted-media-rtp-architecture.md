@@ -160,7 +160,7 @@ The Media Encoder takes a Raw Stream consisting of raw content and metadata of r
 
 The Media Encryptor takes an Encode Stream and metadata of raw content and generates an Encrypted Stream consisting of encrypted content. It also separates out the metadata that will be needed by processing units that do not have encryption keys (and thus can work only with an Encrypted Stream and not with an Encoded Stream).   Metadata needed by such processing units is passed directly to the Media Packetizer, but metadata that should not be available by such processing units is not passed directly to the Media Packetizer (but may be included in the encrypted content).  {{SFrame}} is an example of encrypted content.
 
-It is the responsibility of the application using the Media Encryptor to provide it encoded content in meaningful units of encoded content.
+It is the responsibility of the application using the Media Encryptor to provide its encoded content in meaningful units of encoded content.
 In the common case of a video codec, the unit of encoded content is a video frame in byte format (h264 annex b for example).
 
 If a unit of encoded content smaller than a video frame is useful for a particular application, it is the responsibility of the Media Encoder to provide the Media Encryptor such units. Each unit of encoded content will be encrypted and sent to the Encrypted Media Packetizer separately, as a unit of encrypted content. The typical case is a video codec supporting spatial scalability: each spatial layer will typically be split in its own encoded content unit.
