@@ -242,7 +242,7 @@ One possible implementation may meet these requirements as follows:
 1. The payload type of the encoded content is the first byte of the RTP payload.
 1. The remaining RTP payload is a chunk of the encoded content broken up such that the concatenation of RTP payloads (after removing the payload type prefix) in order of sequence number is equal to the encoded content.
 1. Send SVC encrypted content using one SSRC in ascending layer order, with the same RTP timestamp, and only the last RTP packet of the last spatial layer frame will have the marker bit set to 1.
-1. Send SVC metadata using the Dependency Descriptor header extension. The first RTP packet of the frame will have its start_of_frame equal to 1 and the last packet will have its end_of_frame equal to 1.  Such information may be procided by WebCodecs SvcOutputMetadata
+1. Send SVC metadata using the Dependency Descriptor header extension. The first RTP packet of the frame will have its start_of_frame equal to 1 and the last packet will have its end_of_frame equal to 1. Such information may be provided to the MediaPacketizer as part of the encoded metadata, for instance by WebCodecs SvcOutputMetadata
 (see https://docs.google.com/presentation/d/1lFAUSvApbBYfBNJH_xcRW0YjD0aF5T1ZqjyyDJMesJw/edit#slide=id.g1a4ac56601a_3_7).
 
 
