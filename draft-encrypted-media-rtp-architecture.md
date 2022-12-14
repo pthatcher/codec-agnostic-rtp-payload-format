@@ -163,7 +163,7 @@ The Media Encryptor takes an Encode Stream and metadata of raw content and gener
 It is the responsibility of the application using the Media Encryptor to provide it encoded content in meaningful units of encoded content.
 In the common case of a video codec, the unit of encoded content is a video frame in byte format (h264 annex b for example).
 
-If a unit of encoded content smaller than a video frame is useful for a particular application, it is the responsibility of the Media Encoder to provideo the Media Encryptor such units.  Each unit of encoded content will be encrypted and sent to the Encrypted Media Packetizer separately, as a unit of encrypted content.  The typical case is a video codec supporting spatial scalability: each spatial layer will typically be split in its own encoded frame.
+If a unit of encoded content smaller than a video frame is useful for a particular application, it is the responsibility of the Media Encoder to provide the Media Encryptor such units. Each unit of encoded content will be encrypted and sent to the Encrypted Media Packetizer separately, as a unit of encrypted content. The typical case is a video codec supporting spatial scalability: each spatial layer will typically be split in its own encoded content unit.
 
 RTP packetization
 -----------------------
